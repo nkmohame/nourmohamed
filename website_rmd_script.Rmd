@@ -1,125 +1,30 @@
 ---
-title: "Problem Set 3 (solution)"
-author: "EDS"
-date: "10/18/2021"
+title: "Nour Mohamed"
+author: "Nour Mohamed"
+date: '2022-07-27'
 output: html_document
 ---
-
+  
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## R Markdown
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE, class.output="bg-warning"}
-library(tidyverse)
-bm <- read_csv("bm.csv")
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+  
+```{r cars}
+summary(cars)
 ```
-<br>
 
-<h2 style="color:#00008b">   Question 1 </h2>
+## Including Plots
 
-```{r q1, class.source="bg-success",message=FALSE}
-bm_r <- group_by(bm, race)
-summarize(bm_r, avg_numjobs = mean(jobs), avg_educ = mean(education))
+You can also embed plots, for example:
+  
+```{r pressure, echo=FALSE}
+plot(pressure)
 ```
-<br>
 
-$\color{maroon}{\text{Piping: no need to create a new dataframe, done in 1 step.}}$ 
-```{r q1p, warning=FALSE, message=FALSE, results='hide'}
-bm %>%
-  group_by(race) %>%
-  summarize(avg_numjobs = mean(jobs), avg_educ = mean(education))
-```
-<br>
-
-***If we want to find the p-value of the mean difference***
-```{r q1a, warning=FALSE, message=FALSE, class.source="bg-success"}
-# i)
-t.test(education ~ race, data = bm) 
-# ii)
-t.test(jobs ~ race, data = bm) 
-
-```
-<br>
-
-**i)** p-value=0.81 (we can't reject the null)
-
-**ii)** p-value=0.86 (we can't reject the null)
-
-<br>
-Seeing that there is balance in all observables gives us confidence that the randomization worked: we can be confident that pool of CVs for both groups are on average the same in all aspects.
-
-<br>
-
-<h2 style="color:#00008b">   Question 2 </h2>
-**Calculate the average callback rate for all resumes & standard deviation:**
-```{r q2, class.source="bg-success"}
-summarize(bm, avg_callback = mean(call),
-          sd_callback = sd(call))
-
-```
-<br>
-
-$\color{maroon}{\text{Piping:}}$ 
-```{r q2p, warning=FALSE, message=FALSE, results='hide'}
-bm %>%
-  summarize(avg_callback = mean(call),
-            sd_callback = sd(call))
-```
-<br>
-
-<h2 style="color:#00008b">   Question 3 </h2>
-**Calculate the average callback rates and standard deviation separately by race:**
-```{r q3, class.source="bg-success", message=FALSE}
-summarize(bm_r, avg_callback = mean(call),
-          sd_callback = sd(call))
-```
-<br>
-
-$\color{maroon}{\text{Piping:}}$ 
-```{r q3p, warning=FALSE, message=FALSE, results='hide'}
-bm %>%
-  group_by(race) %>%
-  summarize(avg_callback = mean(call),
-            sd_callback = sd(call)) 
-```
-<br>
-
-```{r q3i, class.source="bg-success", message=FALSE}
-t.test(call ~ race, data = bm)
-```
-<br>
-
-Results show that white sounding names get roughly 9.7% callback rate while african-american associated names receive 6.5% callbacks. The ratio of callback rates between the two is roughly 1.5. Difference in callback rates are statistically significant. Given that we saw that CV's are balanced across attributes, this difference in callback rates can only be attributed to employer's treating candidates differently based on their names. If, as authors claim, people associate these names as a representation of the candidate being either White or African-American, then this experiment shows that employers in the US do discriminate by race.
-
-<br>
-
-<h2 style="color:#00008b">   Question 4 </h2>
-**Calculate the average rates for each combination of race and sex:**
-```{r q4, class.source="bg-success", message=FALSE}
-bm_rg <- group_by(bm, race, gender)
-summarize(bm_rg, avg_callback = mean(call),
-          sd_callback = sd(call))
-
-```
-<br>
-
-$\color{maroon}{\text{Piping:}}$ 
-```{r q4p, warning=FALSE, message=FALSE, results='hide'}
-bm %>%
-  group_by(gender, race) %>%
-  summarize(avg_callback = mean(call),
-            sd_callback = sd(call))
-```
-<br>
-
-```{r q4i, class.source="bg-success", message=FALSE}
-t.test(call ~ race, data = bm[bm$gender=="m",])
-t.test(call ~ race, data = bm[bm$gender=="f",])
-
-```
-<br>
-
-Results show that this discrimination in callback rates by race is similar for males and females (approximate ratio of 1.5 for both sexes): no gender differences.Furthermore, these differences are statistically significant for both male and female candidates. It is true that female callback rates are higher than for males, but this is the case for both black and white sounding names. The racial discrimination is not different by gender.
-
-<br>
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
